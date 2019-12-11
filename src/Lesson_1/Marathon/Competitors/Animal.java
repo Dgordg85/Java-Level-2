@@ -1,4 +1,4 @@
-package Lesson_1.Marathon;
+package Lesson_1.Marathon.Competitors;
 
 public class Animal implements Competitor {
     String type;
@@ -62,5 +62,10 @@ public class Animal implements Competitor {
     @Override
     public void info() {
         System.out.println(type + " " + name + " - " + onDistance);
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 }
