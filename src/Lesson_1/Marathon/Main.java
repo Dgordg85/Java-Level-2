@@ -1,9 +1,11 @@
 package Lesson_1.Marathon;
 
 import Lesson_1.Marathon.Competitors.Cat;
+import Lesson_1.Marathon.Competitors.Course;
 import Lesson_1.Marathon.Competitors.Dog;
 import Lesson_1.Marathon.Competitors.Human;
 import Lesson_1.Marathon.Obstacles.Cross;
+import Lesson_1.Marathon.Obstacles.Team;
 import Lesson_1.Marathon.Obstacles.Wall;
 import Lesson_1.Marathon.Obstacles.Water;
 

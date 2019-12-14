@@ -1,4 +1,4 @@
-package Lesson_1.Marathon;
+package Lesson_1.Marathon.Obstacles;
 
 import Lesson_1.Marathon.Competitors.Competitor;
 
