@@ -8,10 +8,7 @@ public class Team {
 
     public Team(String name, Competitor... competitors) {
         this.name = name;
-        this.competitors = new Competitor[competitors.length];
-        for (int i = 0; i < competitors.length; i++) {
-            this.competitors[i] = competitors[i];
-        }
+        this.competitors = competitors;
     }
 
     public Competitor[] getCompetitors() {

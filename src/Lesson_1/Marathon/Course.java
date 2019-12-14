@@ -7,10 +7,7 @@ public class Course {
     private Obstacle[] obstacles;
 
     public Course(Obstacle... obstacles) {
-        this.obstacles = new Obstacle[obstacles.length];
-        for (int i = 0; i < obstacles.length; i++) {
-            this.obstacles[i] = obstacles[i];
-        }
+        this.obstacles = obstacles;
     }
 
     public void doIt(Team team){
