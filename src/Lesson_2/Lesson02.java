@@ -26,7 +26,7 @@ public class Lesson02 {
     private static int arraySum(String[][] arr) throws MyArraySizeException, MyArrayDataException {
         int sum = 0;
 
-        if (arr.length != 4 || arr[0].length != 4) throw new MyArraySizeException();
+        if (arr.length != 4 || arr[0].length != 4 || arr[1].length != 4 || arr[2].length != 4 || arr[3].length != 4) throw new MyArraySizeException();
 
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr[0].length; j++) {
