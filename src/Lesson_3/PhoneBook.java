@@ -1,41 +1,34 @@
 package Lesson_3;
 
 import java.util.HashMap;
-import java.util.Map;
+import java.util.HashSet;
 
 public class PhoneBook {
-    private static HashMap<String, String> phoneBook = new HashMap<>();
+    private HashMap<String, HashSet<String>> phoneBook;
 
-    static {
-        phoneBook.put("+73455353607", "Марков");
-        phoneBook.put("+73455353608", "Марков");
-        phoneBook.put("+79123540789", "Иванов");
+    public PhoneBook() {
+        this.phoneBook = new HashMap<>();
     }
 
     public static void main(String[] args) {
-        add("Макаров", "+79123562850");
-        add("Карпов", "+73455353608");
-        get("Марков");
-        get("Макаров");
+        PhoneBook phoneBook = new PhoneBook();
+        phoneBook.add("Макаров", "+79123562850");
+        phoneBook.add("Макаров", "+79123562750");
+        phoneBook.add("Карпов", "+73455353608");
+        phoneBook.get("Марков");
+        phoneBook.get("Макаров");
     }
 
-    public static void add(String soname, String telephone){
-        if (!phoneBook.containsKey(telephone)){
-            phoneBook.put(telephone, soname);
-        } else {
-            System.out.println("Человек с таким номером уже есть в базе.");
-        }
-
+    public void add(String soname, String telephone){
+        HashSet<String> hs = phoneBook.getOrDefault(soname, new HashSet<>());
+        hs.add(telephone);
+        phoneBook.put(soname, hs);
     }
 
-    public static void get(String soname){
-        if (phoneBook.containsValue(soname)){
-            System.out.println(soname + ":");
-            for(Map.Entry<String, String> entry : phoneBook.entrySet()){
-                if (entry.getValue() == soname){
-                    System.out.println(entry.getKey());
-                }
-            }
-        }
+    public void get(String soname){
+        if (phoneBook.containsKey(soname))
+            System.out.println(phoneBook.get(soname));
+        else
+            System.out.println("Такой фамилии нет!");
     }
 }
