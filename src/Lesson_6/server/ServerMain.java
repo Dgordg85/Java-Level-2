@@ -60,4 +60,13 @@ public class ServerMain {
     void unsubscribe(ClientHandler client){
         clients.remove(client);
     }
+
+    boolean isNickUnique(String nick){
+        for (ClientHandler client : clients){
+            if (client.getNick().equals(nick)){
+                return false;
+            }
+        }
+        return true;
+    }
 }

@@ -29,12 +29,14 @@ public class ClientHandler {
                             if (str.startsWith("/auth")){
                                 String[] token = str.split(" ");
                                 String newNick = AuthService.getNickByLoginPass(token[1], token[2]);
-                                if (newNick != null){
+                                if (newNick != null && server.isNickUnique(newNick)){
                                     sendMsg("/authok");
                                     nick = newNick;
                                     server.subscribe(ClientHandler.this);
                                     break;
-                                } else {
+                                } else if (!server.isNickUnique(newNick)){
+                                    sendMsg("Данный ник уже используется!");
+                                }else {
                                     sendMsg("Неверный логин/пароль!");
                                 }
                             }
@@ -83,4 +85,7 @@ public class ClientHandler {
         }
     }
 
+    public String getNick() {
+        return nick;
+    }
 }
