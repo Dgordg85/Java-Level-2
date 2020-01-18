@@ -33,6 +33,7 @@ public class ClientHandler {
                                     sendMsg("/authok");
                                     nick = newNick;
                                     server.subscribe(ClientHandler.this);
+                                    server.broadcastMsg("К чату присоединился " + nick + ".");
                                     break;
                                 } else if (!server.isNickUnique(newNick)){
                                     sendMsg("Данный ник уже используется!");
@@ -46,6 +47,7 @@ public class ClientHandler {
                             String str = in.readUTF();
                             if (str.equals("/end")){
                                 out.writeUTF("/serverClosed");
+                                server.broadcastMsg(nick + " покинул чат!");
                                 break;
                             }
 
