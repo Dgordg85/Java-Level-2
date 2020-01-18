@@ -32,7 +32,8 @@ public class Homework {
 
     //Второй метод
     private static void second() throws InterruptedException {
-        float[] arr = fillArray(new float[size]);
+        float[] arr = new float[SIZE];
+        Arrays.fill(arr, 1f);
 
         long beginSecond = System.currentTimeMillis();
         divideMassive(arr);
@@ -55,13 +56,6 @@ public class Homework {
         System.out.println("Метод second завершил работу");
         System.out.println("Время работы второго метода: " + (System.currentTimeMillis() - beginSecond) + "мс");
         return;
-    }
-
-    private static float[] fillArray(float[] arr){
-        for (int i = 0; i < arr.length; i++) {
-            arr[i] = 1;
-        }
-        return arr;
     }
 
     private static void divideMassive(float[] arr){
