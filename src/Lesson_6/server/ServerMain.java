@@ -3,7 +3,6 @@ package Lesson_6.server;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Iterator;
 import java.util.Vector;
 
 public class ServerMain {
@@ -16,14 +15,16 @@ public class ServerMain {
 
 
         try {
+            AuthService.connect();
+            //String str = AuthService.getNickByLoginPass("login1", "pass1");
+            //System.out.println(str);
             server = new ServerSocket(15000);
             System.out.println("Сервер запущен");
 
             while (true){
                 socket = server.accept();
                 System.out.println("Клиент подключился");
-
-                clients.add(new ClientHandler(this, socket, clients.size()));
+                new ClientHandler(this, socket);
             }
 
         } catch (IOException e) {
@@ -40,6 +41,7 @@ public class ServerMain {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            AuthService.disconnect();
         }
     }
     public void broadcastMsg(String msg) {
@@ -51,16 +53,11 @@ public class ServerMain {
 
     }
 
-    public void deleteClient(int id){
-        synchronized (clients){
+    void subscribe(ClientHandler client){
+        clients.add(client);
+    }
 
-            Iterator<ClientHandler> iterator = clients.iterator();
-            while (iterator.hasNext()) {
-                if (iterator.next().getId() == id){
-                    iterator.remove();
-                    break;
-                }
-            }
-        }
+    void unsubscribe(ClientHandler client){
+        clients.remove(client);
     }
 }
