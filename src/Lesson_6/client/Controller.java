@@ -1,5 +1,6 @@
 package Lesson_6.client;
 
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.net.Socket;
 import java.net.URL;
 import java.util.ResourceBundle;
+
 
 public class Controller {
     @FXML
@@ -99,7 +101,6 @@ public class Controller {
 
                        try {
                            socket.close();
-
                        } catch (IOException e) {
                            e.printStackTrace();
                        }

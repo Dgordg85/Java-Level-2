@@ -19,7 +19,7 @@ public class ClientHandler {
             this.server = server;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-
+          
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -82,9 +82,5 @@ public class ClientHandler {
             e.printStackTrace();
         }
     }
-
-
-
-
 
 }

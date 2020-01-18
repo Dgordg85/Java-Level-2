@@ -60,7 +60,6 @@ public class Homework {
         return;
     }
 
-
     private static void divideMassive(float[] arr){
         for (int i = 0; i < THREAD_COUNT - 1; i++) {
             float[] listArr = new float[PART_SIZE];
