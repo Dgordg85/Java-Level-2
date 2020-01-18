@@ -34,10 +34,8 @@ public class Homework {
 
     //Второй метод
     private static void second() throws InterruptedException {
-
         float[] arr = new float[SIZE];
         Arrays.fill(arr, 1f);
-      
         long beginSecond = System.currentTimeMillis();
         divideMassive(arr);
 
