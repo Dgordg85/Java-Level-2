@@ -48,8 +48,17 @@ public class ClientHandler {
                                 out.writeUTF("/serverClosed");
                                 break;
                             }
-                            System.out.println("client: " + str);
-                            server.broadcastMsg(nick + ": " + str);
+
+                            if (str.startsWith("/w")){
+                                ClientHandler client = server.getClient(ClientHandler.this.getNickFromMessage(str));
+                                if (client != null) {
+                                    server.personalMsg(client, "Личное сообщение от " + nick + ": " + ClientHandler.this.getMessageFromPrivateMessage(str));
+                                } else {
+                                    sendMsg("Не удалось отправить личное сообщение.\nТакого пользователся нет в чате!");
+                                }
+                            } else {
+                                server.broadcastMsg(nick + ": " + str);
+                            }
                         }
                     }catch (IOException e){
                         e.printStackTrace();
@@ -87,5 +96,17 @@ public class ClientHandler {
 
     public String getNick() {
         return nick;
+    }
+
+    private String getNickFromMessage(String msg){
+        String[] msgArr = msg.split(" ");
+        return msgArr[1];
+    }
+
+    private String getMessageFromPrivateMessage(String msg){
+        String[] msgArr = msg.split(" ");
+        msgArr[0] = "";
+        msgArr[1] = "";
+        return String.join(" ", msgArr);
     }
 }

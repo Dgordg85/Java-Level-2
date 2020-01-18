@@ -44,13 +44,14 @@ public class ServerMain {
             AuthService.disconnect();
         }
     }
-    public void broadcastMsg(String msg) {
-        synchronized (clients){
-            for (ClientHandler o: clients){
-                o.sendMsg(msg);
-            }
+    void broadcastMsg(String msg) {
+        for (ClientHandler o: clients){
+            o.sendMsg(msg);
         }
+    }
 
+    void personalMsg(ClientHandler client, String msg){
+        client.sendMsg(msg);
     }
 
     void subscribe(ClientHandler client){
@@ -68,5 +69,14 @@ public class ServerMain {
             }
         }
         return true;
+    }
+
+    ClientHandler getClient(String nick){
+        for (ClientHandler client : clients){
+            if (client.getNick().equals(nick)){
+                return client;
+            }
+        }
+        return null;
     }
 }
