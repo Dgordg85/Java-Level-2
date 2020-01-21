@@ -50,8 +50,14 @@ public class ServerMain {
         }
     }
 
-    void personalMsg(ClientHandler client, String msg){
-        client.sendMsg(msg);
+    void personalMsg(ClientHandler from, String client, String msg){
+        ClientHandler ch = getClient(client);
+        if (ch != null){
+            ch.sendMsg("Личное сообщение от " + from.getNick() + ": " + msg);
+            from.sendMsg("Личное сообщение для " + ch.getNick() + ": " + msg);
+        } else {
+            from.sendMsg("Не удалось отправить сообщение: " + msg + " для " + client + "\nНет такого пользователя!");
+        }
     }
 
     void subscribe(ClientHandler client){

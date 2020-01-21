@@ -49,15 +49,9 @@ public class ClientHandler {
                                 out.writeUTF("/serverClosed");
                                 server.broadcastMsg(nick + " покинул чат!");
                                 break;
-                            }
-
-                            if (str.startsWith("/w")){
-                                ClientHandler client = server.getClient(ClientHandler.this.getNickFromMessage(str));
-                                if (client != null) {
-                                    server.personalMsg(client, "Личное сообщение от " + nick + ": " + ClientHandler.this.getMessageFromPrivateMessage(str));
-                                } else {
-                                    sendMsg("Не удалось отправить личное сообщение.\nТакого пользователся нет в чате!");
-                                }
+                            } else if (str.startsWith("/w")){
+                                String[] strArr = str.split(" ", 3);
+                                server.personalMsg(ClientHandler.this, strArr[1], strArr[2]);
                             } else {
                                 server.broadcastMsg(nick + ": " + str);
                             }
@@ -98,17 +92,5 @@ public class ClientHandler {
 
     public String getNick() {
         return nick;
-    }
-
-    private String getNickFromMessage(String msg){
-        String[] msgArr = msg.split(" ");
-        return msgArr[1];
-    }
-
-    private String getMessageFromPrivateMessage(String msg){
-        String[] msgArr = msg.split(" ");
-        msgArr[0] = "";
-        msgArr[1] = "";
-        return String.join(" ", msgArr);
     }
 }
