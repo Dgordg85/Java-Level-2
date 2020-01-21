@@ -45,13 +45,16 @@ public class ClientHandler {
 
                         while (true){
                             String str = in.readUTF();
-                            if (str.equals("/end")){
-                                out.writeUTF("/serverClosed");
-                                server.broadcastMsg(nick + " покинул чат!");
-                                break;
-                            } else if (str.startsWith("/w")){
-                                String[] strArr = str.split(" ", 3);
-                                server.personalMsg(ClientHandler.this, strArr[1], strArr[2]);
+                            if (str.startsWith("/")){
+                                if (str.equals("/end")){
+                                    out.writeUTF("/serverClosed");
+                                    server.broadcastMsg(nick + " покинул чат!");
+                                    break;
+                                }
+                                if (str.startsWith("/w")) {
+                                    String[] strArr = str.split(" ", 3);
+                                    server.personalMsg(ClientHandler.this, strArr[1], strArr[2]);
+                                }
                             } else {
                                 server.broadcastMsg(nick + ": " + str);
                             }
