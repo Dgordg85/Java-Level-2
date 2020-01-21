@@ -44,13 +44,20 @@ public class ServerMain {
             AuthService.disconnect();
         }
     }
-    public void broadcastMsg(String msg) {
-        synchronized (clients){
-            for (ClientHandler o: clients){
-                o.sendMsg(msg);
-            }
+    void broadcastMsg(String msg) {
+        for (ClientHandler o: clients){
+            o.sendMsg(msg);
         }
+    }
 
+    void personalMsg(ClientHandler from, String client, String msg){
+        ClientHandler ch = getClient(client);
+        if (ch != null){
+            ch.sendMsg("Личное сообщение от " + from.getNick() + ": " + msg);
+            from.sendMsg("Личное сообщение для " + ch.getNick() + ": " + msg);
+        } else {
+            from.sendMsg("Не удалось отправить сообщение: " + msg + " для " + client + "\nНет такого пользователя!");
+        }
     }
 
     void subscribe(ClientHandler client){
@@ -59,5 +66,23 @@ public class ServerMain {
 
     void unsubscribe(ClientHandler client){
         clients.remove(client);
+    }
+
+    boolean isNickUnique(String nick){
+        for (ClientHandler client : clients){
+            if (client.getNick().equals(nick)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    ClientHandler getClient(String nick){
+        for (ClientHandler client : clients){
+            if (client.getNick().equals(nick)){
+                return client;
+            }
+        }
+        return null;
     }
 }

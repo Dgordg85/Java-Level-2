@@ -29,12 +29,15 @@ public class ClientHandler {
                             if (str.startsWith("/auth")){
                                 String[] token = str.split(" ");
                                 String newNick = AuthService.getNickByLoginPass(token[1], token[2]);
-                                if (newNick != null){
+                                if (newNick != null && server.isNickUnique(newNick)){
                                     sendMsg("/authok");
                                     nick = newNick;
                                     server.subscribe(ClientHandler.this);
+                                    server.broadcastMsg("К чату присоединился " + nick + ".");
                                     break;
-                                } else {
+                                } else if (!server.isNickUnique(newNick)){
+                                    sendMsg("Данный ник уже используется!");
+                                }else {
                                     sendMsg("Неверный логин/пароль!");
                                 }
                             }
@@ -44,10 +47,14 @@ public class ClientHandler {
                             String str = in.readUTF();
                             if (str.equals("/end")){
                                 out.writeUTF("/serverClosed");
+                                server.broadcastMsg(nick + " покинул чат!");
                                 break;
+                            } else if (str.startsWith("/w")){
+                                String[] strArr = str.split(" ", 3);
+                                server.personalMsg(ClientHandler.this, strArr[1], strArr[2]);
+                            } else {
+                                server.broadcastMsg(nick + ": " + str);
                             }
-                            System.out.println("client: " + str);
-                            server.broadcastMsg(nick + ": " + str);
                         }
                     }catch (IOException e){
                         e.printStackTrace();
@@ -83,4 +90,7 @@ public class ClientHandler {
         }
     }
 
+    public String getNick() {
+        return nick;
+    }
 }
