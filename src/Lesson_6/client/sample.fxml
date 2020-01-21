@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 
 <?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ListView?>
 <VBox alignment="center" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lesson_6.client.Controller">
     <HBox fx:id="upperPanel">
         <TextField HBox.hgrow="ALWAYS" promptText="Логин" fx:id="loginField"/>
@@ -17,9 +18,14 @@
     <stylesheets>
         <URL value="@../client/css/Styles.css" />
     </stylesheets>
-    <TextArea fx:id="textArea" editable="false" VBox.vgrow="ALWAYS" />
-    <HBox fx:id="bottomPanel" managed="false" visible="false" id="hbox" alignment="CENTER" prefHeight="39.0" prefWidth="478.0">
-        <TextField fx:id="textField" onAction="#sendMsg" promptText="Напишите сообщение..." />
-        <Button fx:id="btn" onAction="#sendMsg" text="Отправить" />
+    <HBox VBox.vgrow="ALWAYS">
+        <VBox  HBox.hgrow="ALWAYS" alignment="CENTER" prefHeight="39.0" prefWidth="478.0">
+            <TextArea fx:id="textArea" editable="false" VBox.vgrow="ALWAYS" />
+            <HBox fx:id="bottomPanel" visible="false" managed="false" HBox.hgrow="ALWAYS">
+                <TextField fx:id="textField" onAction="#sendMsg" promptText="Напишите сообщение..." />
+                <Button fx:id="btn" onAction="#sendMsg" text="Отправить" />
+            </HBox>
+        </VBox>
+        <ListView fx:id="clientList" managed="false" visible="false"></ListView>
     </HBox>
 </VBox>

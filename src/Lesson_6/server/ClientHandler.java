@@ -4,6 +4,8 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ClientHandler {
     Socket socket;
@@ -11,6 +13,7 @@ public class ClientHandler {
     private DataInputStream in;
     private ServerMain server;
     private String nick;
+    private List<String> blacklist;
 
     public ClientHandler(ServerMain server, Socket socket) {
 
@@ -19,7 +22,8 @@ public class ClientHandler {
             this.server = server;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-          
+            blacklist = new ArrayList<>();
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -33,7 +37,7 @@ public class ClientHandler {
                                     sendMsg("/authok");
                                     nick = newNick;
                                     server.subscribe(ClientHandler.this);
-                                    server.broadcastMsg("К чату присоединился " + nick + ".");
+                                    server.broadcastMsg(ClientHandler.this, "К чату присоединился " + nick + ".");
                                     break;
                                 } else if (!server.isNickUnique(newNick)){
                                     sendMsg("Данный ник уже используется!");
@@ -48,15 +52,20 @@ public class ClientHandler {
                             if (str.startsWith("/")){
                                 if (str.equals("/end")){
                                     out.writeUTF("/serverClosed");
-                                    server.broadcastMsg(nick + " покинул чат!");
+                                    server.broadcastMsg(ClientHandler.this, nick + " покинул чат!");
                                     break;
                                 }
                                 if (str.startsWith("/w")) {
                                     String[] strArr = str.split(" ", 3);
                                     server.personalMsg(ClientHandler.this, strArr[1], strArr[2]);
                                 }
+                                if (str.startsWith("/blacklist")){
+                                    String[] strArr = str.split(" ");
+                                    blacklist.add(strArr[1]);
+                                    sendMsg("Вы добавили пользователя " + strArr[1] + " в черный список!");
+                                }
                             } else {
-                                server.broadcastMsg(nick + ": " + str);
+                                server.broadcastMsg(ClientHandler.this, nick + ": " + str);
                             }
                         }
                     }catch (IOException e){
@@ -95,5 +104,9 @@ public class ClientHandler {
 
     public String getNick() {
         return nick;
+    }
+
+    public List<String> getBlacklist() {
+        return blacklist;
     }
 }

@@ -44,9 +44,12 @@ public class ServerMain {
             AuthService.disconnect();
         }
     }
-    void broadcastMsg(String msg) {
+    void broadcastMsg(ClientHandler from, String msg) {
         for (ClientHandler o: clients){
-            o.sendMsg(msg);
+            if (!o.getBlacklist().contains(from.getNick())){
+                o.sendMsg(msg);
+            }
+
         }
     }
 
@@ -62,10 +65,12 @@ public class ServerMain {
 
     void subscribe(ClientHandler client){
         clients.add(client);
+        broadcastClientList();
     }
 
     void unsubscribe(ClientHandler client){
         clients.remove(client);
+        broadcastClientList();
     }
 
     boolean isNickUnique(String nick){
@@ -84,5 +89,17 @@ public class ServerMain {
             }
         }
         return null;
+    }
+
+    public  void  broadcastClientList(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("/clientlist ");
+        for (ClientHandler o : clients){
+            sb.append(o.getNick() + " ");
+        }
+        String out = sb.toString();
+        for (ClientHandler o: clients){
+            o.sendMsg(out);
+        }
     }
 }
