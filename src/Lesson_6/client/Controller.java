@@ -1,21 +1,17 @@
 package Lesson_6.client;
 
-
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
-import java.net.URL;
-import java.util.ResourceBundle;
-
 
 public class Controller {
     @FXML
@@ -46,7 +42,18 @@ public class Controller {
     @FXML
     PasswordField passwordField;
 
-    private  boolean isAuthorized;
+    @FXML
+    ListView<String> clientList;
+
+    @FXML
+    ListView<VBox> messagesView;
+
+    @FXML
+    HBox textButtonBox;
+
+
+    private boolean isAuthorized;
+    private String nick = "";
 
     public void setAuthorized(boolean isAuthorized){
         this.isAuthorized = isAuthorized;
@@ -54,13 +61,18 @@ public class Controller {
         if (!isAuthorized){
             upperPanel.setVisible(true);
             upperPanel.setManaged(true);
-            bottomPanel.setVisible(false);
-            bottomPanel.setManaged(false);
+            textButtonBox.setVisible(false);
+            textButtonBox.setManaged(false);
+            clientList.setManaged(false);
+            clientList.setVisible(false);
+
         } else {
             upperPanel.setVisible(false);
             upperPanel.setManaged(false);
-            bottomPanel.setVisible(true);
-            bottomPanel.setManaged(true);
+            textButtonBox.setVisible(true);
+            textButtonBox.setManaged(true);
+            clientList.setManaged(true);
+            clientList.setVisible(true);
         }
     }
 
@@ -77,17 +89,34 @@ public class Controller {
                        while (true){
                            String str = in.readUTF();
                            if (str.startsWith("/authok")){
+                               String[] strArr = str.split(" ");
+                               nick = strArr[1];
                                setAuthorized(true);
                                break;
                            } else {
-                               textArea.appendText(str + "\n");
+                               setMsg(str);
                            }
                        }
 
                        while (true){
                            String str = in.readUTF();
                            if (str.equals("/serverClosed")) break;
-                           textArea.appendText(str + "\n");
+                           if (str.startsWith("/clientlist")){
+                               String[] tokens = str.split(" ");
+                               Platform.runLater(new Runnable() {
+                                   @Override
+                                   public void run() {
+                                       clientList.getItems().clear();
+                                       for (int i = 1; i < tokens.length; i++) {
+                                           clientList.getItems().add(tokens[i]);
+                                       }
+                                   }
+                               });
+
+                           } else {
+                               setMsg(str);
+                           }
+
                        }
                    } catch (IOException e){
                        e.printStackTrace();
@@ -123,6 +152,24 @@ public class Controller {
         }
 
     }
+
+    public void setMsg(String str) {
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                Label message = new Label(str);
+                VBox messageBox = new VBox(message);
+                if(nick != "") {
+                    String[] mass = str.split(":");
+                    if(nick.equalsIgnoreCase(mass[0])) {
+                        messageBox.setAlignment(Pos.CENTER_RIGHT);
+                    }
+                }
+                messagesView.getItems().add(messageBox);
+            }
+        });
+    }
+
 
     public void tryToAuth(ActionEvent actionEvent) {
         if (socket == null || socket.isClosed()){
