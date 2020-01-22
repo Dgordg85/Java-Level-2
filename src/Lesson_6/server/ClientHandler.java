@@ -1,5 +1,8 @@
 package Lesson_6.server;
 
+import javafx.fxml.FXML;
+import javafx.scene.control.ListView;
+
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -34,7 +37,7 @@ public class ClientHandler {
                                 String[] token = str.split(" ");
                                 String newNick = AuthService.getNickByLoginPass(token[1], token[2]);
                                 if (newNick != null && server.isNickUnique(newNick)){
-                                    sendMsg("/authok");
+                                    sendMsg("/authok " + newNick);
                                     nick = newNick;
                                     server.subscribe(ClientHandler.this);
                                     server.broadcastMsg(ClientHandler.this, "К чату присоединился " + nick + ".");
@@ -70,7 +73,9 @@ public class ClientHandler {
                         }
                     }catch (IOException e){
                         e.printStackTrace();
-                    } finally {
+                    }catch (IndexOutOfBoundsException e) {
+                        sendMsg("Неверный логин/пароль!");
+                    }finally{
                         try {
                             in.close();
                             out.close();

@@ -11,7 +11,7 @@
 
 #textField {
     -fx-border-radius: 15;
-    -fx-pref-width: 250;
+   /* -fx-pref-width: 170;*/
     -fx-pref-height: 35px;
     -fx-padding: 5px;
     -fx-border-insets: 5px;
@@ -19,21 +19,13 @@
 }
 
 
-#textArea {
-    -fx-background-image: url("../img/background2.jpg");
-    -fx-background-size: 50% 50%;
+.list-cell {
     -fx-background-color: transparent;
+    -fx-padding: 3 3 3 3;
 }
 
-#textArea .scroll-pane {
-    -fx-background-color: transparent;
-}
-
-#textArea .scroll-pane .viewport{
-    -fx-background-color: transparent;
-}
-
-
-#textArea .scroll-pane .content{
-    -fx-background-color: transparent;
+#bottomPanel {
+      -fx-background-image: url("../img/background2.jpg");
+      -fx-background-size: 50% 50%;
+      -fx-background-color: transparent;
 }
