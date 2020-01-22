@@ -1,8 +1,5 @@
 package Lesson_6.server;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.ListView;
-
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,7 +22,7 @@ public class ClientHandler {
             this.server = server;
             this.in = new DataInputStream(socket.getInputStream());
             this.out = new DataOutputStream(socket.getOutputStream());
-            blacklist = new ArrayList<>();
+            blacklist = new ArrayList();
 
             new Thread(new Runnable() {
                 @Override
@@ -40,6 +37,7 @@ public class ClientHandler {
                                     sendMsg("/authok " + newNick);
                                     nick = newNick;
                                     server.subscribe(ClientHandler.this);
+                                    AuthService.fillBlackList(ClientHandler.this);
                                     server.broadcastMsg(ClientHandler.this, "К чату присоединился " + nick + ".");
                                     break;
                                 } else if (!server.isNickUnique(newNick)){
@@ -64,7 +62,7 @@ public class ClientHandler {
                                 }
                                 if (str.startsWith("/blacklist")){
                                     String[] strArr = str.split(" ");
-                                    blacklist.add(strArr[1]);
+                                    AuthService.addUserToBlacklist(ClientHandler.this, strArr[1]);
                                     sendMsg("Вы добавили пользователя " + strArr[1] + " в черный список!");
                                 }
                             } else {
